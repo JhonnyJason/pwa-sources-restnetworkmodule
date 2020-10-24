@@ -10,17 +10,8 @@ print = (arg) -> console.log(arg)
 #endregion
 
 ############################################################
-fetch = require("node-fetch").default
-
-############################################################
-cfg = null
-auth = null
-
-############################################################
 networkmodule.initialize = () ->
     log "networkmodule.initialize"
-    cfg = allModules.configmodule
-    auth = allModules.authmodule
     return
 
 ############################################################
