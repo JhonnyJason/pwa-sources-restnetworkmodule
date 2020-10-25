@@ -10,12 +10,16 @@ print = (arg) -> console.log(arg)
 #endregion
 
 ############################################################
+specificInterface  = require("./specificinterface")
+
+############################################################
 networkmodule.initialize = () ->
     log "networkmodule.initialize"
+    if specificInterface? then Object.assign(networkmodule, specificInterface)
     return
 
 ############################################################
-postData = (url, data) ->
+networkmodule.postData = (url, data) ->
     options =
         method: 'POST'
         credentials: 'omit'
@@ -27,67 +31,10 @@ postData = (url, data) ->
     if response.status == 403 then throw new Error("Unauthorized!")
     return response.json()
 
-############################################################
-#region exposedFunctions
+networkmodule.getData = (url) ->
+    response = await fetch(url)
+    if response.status == 403 then throw new Error("Unauthorized!")
+    return response.json()
 
-############################################################
-networkmodule.getTickers = (exchange, assetPairs)->
-    log "networkmodule.getTickers"
-
-    throw new Error("Exchange does not exist") unless cfg[exchange]?
-    assetPairs = cfg[exchange].assetPairs unless assetPairs?
-    assetPairs = [assetPairs] unless Array.isArray(assetPairs)
-
-    requestURL = cfg[exchange].observerURL + "/getLatestTicker"
-    data = {assetPairs}
-    return postData(requestURL, data)
-
-networkmodule.getBalances = (exchange, assets)->
-    log "networkmodule.getBinanceBalances"
-
-    throw new Error("Exchange does not exist") unless cfg[exchange]?
-    assets = cfg[exchange].assets unless assets?
-    assets = [assets] unless Array.isArray(assets)
-
-    requestURL = cfg[exchange].observerURL + "/getLatestBalance"
-    data = {assets}
-    return postData(requestURL, data)
-
-networkmodule.getOrders = (exchange, assetPairs)->
-    log "networkmodule.getBinanceTickers"
-
-    throw new Error("Exchange does not exist") unless cfg[exchange]?
-    assetPairs = cfg[exchange].assetPairs unless assetPairs?
-    assetPairs = [assetPairs] unless Array.isArray(assetPairs)
-
-    requestURL = cfg[exchange].observerURL + "/getLatestOrders"
-    data = {assetPairs}
-    return postData(requestURL, data)
-
-
-############################################################
-networkmodule.placeOrders = (exchange, orders)->
-    log "networkmodule.placeOrders"
-    
-    throw new Error("Exchange does not exist") unless cfg[exchange]?
-    orders = [orders] unless Array.isArray(orders)
-
-    signature = auth.createSignature(JSON.stringify(orders))
-    requestURL = cfg[exchange].traderURL + "/placeOrders"
-    data = {orders,signature}
-    return postData(requestURL, data)
-
-networkmodule.cancelOrders = (exchange, orders)->
-    log "networkmodule.cancelOrders"
-    
-    throw new Error("Exchange does not exist") unless cfg[exchange]?
-    orders = [orders] unless Array.isArray(orders)
-
-    signature = auth.createSignature(JSON.stringify(orders))
-    requestURL = cfg[exchange].traderURL + "/cancelOrders"
-    data = {orders,signature}
-    return postData(requestURL, data)
-
-#endregion
 
 module.exports = networkmodule
