@@ -1,3 +1,4 @@
+[![hackmd-github-sync-badge](https://hackmd.io/mJLlooBoT-u0AxreoISIkQ/badge)](https://hackmd.io/mJLlooBoT-u0AxreoISIkQ)
 ###### tags: `strunfun`
 
 # [pwa-sources-restnetworkmodule](https://github.com/JhonnyJason/pwa-sources-restnetworkmodule) - networkmodule
