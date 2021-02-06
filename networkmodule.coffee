@@ -11,12 +11,8 @@ print = (arg) -> console.log(arg)
 
 ############################################################
 specificInterface  = require("./specificinterface")
+if specificInterface? then Object.assign(networkmodule, specificInterface)
 
-############################################################
-networkmodule.initialize = () ->
-    log "networkmodule.initialize"
-    if specificInterface? then Object.assign(networkmodule, specificInterface)
-    return
 
 ############################################################
 networkmodule.postData = (url, data) ->
